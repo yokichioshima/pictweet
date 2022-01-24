@@ -11,8 +11,11 @@ class TweetsController < ApplicationController
   end
 
   def create
-    binding.pry
-    Tweet.create(tweet_params)
+    @tweet = Tweet.new(tweet_params)
+    if @tweet.save
+    else
+      render :new
+    end
   end
 
   def destroy
@@ -24,8 +27,11 @@ class TweetsController < ApplicationController
   end
 
   def update
-    tweet = Tweet.find(params[:id])
-    tweet.update(tweet_params)
+    @tweet = Tweet.find(params[:id])
+    if @tweet.update(tweet_params)
+    else
+      render :edit
+    end
   end
 
   def show
@@ -34,7 +40,7 @@ class TweetsController < ApplicationController
   end
 
   def search
-    @tweets = Tweet.search(params[:keyword])
+    @tweets = SearchTweetsService.search(params[:keyword])
   end
 
   private
